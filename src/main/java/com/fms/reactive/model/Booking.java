@@ -3,6 +3,7 @@ package com.fms.reactive.model;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +16,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Booking {
 
+        @Id	
 	    private String pnr;
+        
 	    private String flightId;
 	    private String name;
 	    private String email;

@@ -2,6 +2,7 @@ package com.fms.reactive.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -14,7 +15,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Flight {
 
+	@Id
     private String id;
+	
     private String airlineId;     // reference to Airline.id
     private String source;
     private String destination;

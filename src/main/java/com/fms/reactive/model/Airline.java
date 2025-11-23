@@ -16,6 +16,7 @@ public class Airline {
 
     @Id
     private String id;
+    
     private String airlineName;
     private String airlineCode;
 }
