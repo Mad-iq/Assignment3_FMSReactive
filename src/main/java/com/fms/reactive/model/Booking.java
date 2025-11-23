@@ -24,6 +24,9 @@ public class Booking {
 	    private List<Passenger> passengers;
 	    private List<String> seatNumbers;
 	    private int seatsBooked;
+	    private double totalPrice;
 	    private MealStatus mealStatus;
+	    private BookingStatus bookingStatus;
+	    private TripStatus tripStatus;
 
 }
