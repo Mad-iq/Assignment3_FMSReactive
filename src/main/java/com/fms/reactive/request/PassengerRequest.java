@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 
 public class PassengerRequest {
 
-	   @NotBlank(message = "Passenger name is required")
+	    @NotBlank(message = "Passenger name is required")
 	    private String name;
 
 	    @NotBlank(message= "Passenger gender is required")

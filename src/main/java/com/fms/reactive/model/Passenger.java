@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Document
 @NoArgsConstructor
 @AllArgsConstructor
 public class Passenger {
