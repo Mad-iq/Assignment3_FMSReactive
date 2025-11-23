@@ -7,17 +7,17 @@ import jakarta.validation.constraints.NotNull;
 
 public class SearchFlightRequest {
 
-    @NotBlank
+    @NotBlank(message = "Source is required")
     private String source;
 
-    @NotBlank
+    @NotBlank(message = "Destination is required")
     private String destination;
 
-    @NotBlank
+    @NotBlank(message = "Journey date is required")
     private String journeyDate;
 
-    @NotNull
-    private TripStatus tripType;
+    @NotNull(message = "Trip status is required")
+    private TripStatus tripStatus;
     
     private String returnDate;
 }

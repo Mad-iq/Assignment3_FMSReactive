@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fms.reactive.model.MealStatus;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,21 +12,21 @@ import jakarta.validation.constraints.NotNull;
 
 public class BookingRequest {
 
-    @NotBlank
-    private String userName;
+    @NotBlank(message = "User name is required")
+    private String name;
 
-    @NotBlank
+    @NotBlank(message = "Email is required")
     private String email;
 
-    @Min(value = 1)
+    @Min(value = 1, message = "Atleast 1 seat must be booked" )
     private int seats;
 
-    @NotEmpty
+    @NotEmpty(message = "Passenger list cannot be empty")
     private List<PassengerRequest> passengers;
 
-    @NotNull
+    @NotNull(message = "Meal status is required")
     private MealStatus mealStatus;
 
-    @NotEmpty
+    @NotEmpty(message = "Seat numbers cannot be empty")
     private List<String> seatNumbers;
 }

@@ -5,21 +5,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 public class AddInventory {
-	   @NotBlank
+	   @NotBlank(message = "Airline ID is required")
 	    private String airlineId;
 
-	    @NotBlank
+	    @NotBlank(message = "Source is required")
 	    private String source;
 
-	    @NotBlank
+	    @NotBlank(message = "Destination is required")
 	    private String destination;
 	    
-	    @NotBlank
+	    @NotBlank(message = "Starting date and time is required")
 	    private String startTime;
 
-	    @Positive
+	    @Positive(message = "Price must be positive")
 	    private double price;
 
-	    @Min(value = 1)
+	    @Min(value = 1, message = "Total seats must be atleast 1")
 	    private int totalSeats;
 }
