@@ -1,16 +1,19 @@
 package com.fms.reactive.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fms.reactive.model.Booking;
 import com.fms.reactive.model.Flight;
-import com.fms.reactive.repository.AirlineRepo;
 import com.fms.reactive.request.AddInventory;
+import com.fms.reactive.request.BookingRequest;
 import com.fms.reactive.request.SearchFlightRequest;
+import com.fms.reactive.service.BookingService;
 import com.fms.reactive.service.FlightService;
 
 import jakarta.validation.Valid;
@@ -24,6 +27,7 @@ import reactor.core.publisher.Mono;
 public class FlightController {
 
     private final FlightService flightService;
+    private final BookingService bookingService;
     
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
@@ -35,6 +39,15 @@ public class FlightController {
     @ResponseStatus(HttpStatus.OK)
     public Flux<Flight> searchFlights(@Valid @RequestBody SearchFlightRequest req) {
         return flightService.searchFlights(req);
+    }
+    
+    @PostMapping("/booking/{flightId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<Booking> bookTicket(
+            @PathVariable String flightId,
+            @Valid @RequestBody BookingRequest request) {
+
+        return bookingService.bookTicket(flightId, request);
     }
 
 
