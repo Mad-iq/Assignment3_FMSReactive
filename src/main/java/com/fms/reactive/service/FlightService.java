@@ -1,17 +1,20 @@
 package com.fms.reactive.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import org.springframework.stereotype.Service;
 
 import com.fms.reactive.model.City;
 import com.fms.reactive.model.Flight;
+import com.fms.reactive.model.TripStatus;
 import com.fms.reactive.repository.AirlineRepo;
 import com.fms.reactive.repository.FlightRepo;
 import com.fms.reactive.request.AddInventory;
+import com.fms.reactive.request.SearchFlightRequest;
 
 import lombok.RequiredArgsConstructor;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -56,6 +59,62 @@ public class FlightService {
             throw new RuntimeException(
                 "Invalid city");
         }
+    }
+    
+    
+    
+    public Flux<Flight> searchFlights(SearchFlightRequest req) {
+
+        City sourceCity = validateCity(req.getSource());
+        City destinationCity = validateCity(req.getDestination());
+
+        LocalDate journey = LocalDate.parse(req.getJourneyDate());
+        LocalDateTime startOfDay = journey.atStartOfDay();
+        LocalDateTime endOfDay = journey.atTime(23, 59, 59);
+
+        Flux<Flight> onward = flightRepository
+                .findBySourceAndDestinationAndStartTimeBetween(
+                        sourceCity.name(),
+                        destinationCity.name(),
+                        startOfDay,
+                        endOfDay
+                );
+
+        if (req.getTripStatus() == null || req.getTripStatus() == TripStatus.ONE_WAY) {
+            return onward.switchIfEmpty(
+                    Flux.error(new RuntimeException("No onward flights found"))
+            );
+        }
+
+        // ✔ ROUND TRIP requires returnDate
+        if (req.getReturnDate() == null || req.getReturnDate().isBlank()) {
+            return Flux.error(new IllegalArgumentException(
+                    "Return date is required for ROUND_TRIP search"
+            ));
+        }
+
+        City tempSource = destinationCity;  // reverse route
+        City tempDestination = sourceCity;
+
+        LocalDate returnDate = LocalDate.parse(req.getReturnDate());
+        LocalDateTime returnStart = returnDate.atStartOfDay();
+        LocalDateTime returnEnd = returnDate.atTime(23, 59, 59);
+
+        Flux<Flight> returnFlights = flightRepository
+                .findBySourceAndDestinationAndStartTimeBetween(
+                        tempSource.name(),
+                        tempDestination.name(),
+                        returnStart,
+                        returnEnd
+                );
+
+        return onward
+                .switchIfEmpty(Flux.error(new RuntimeException("No onward flights found")))
+                .concatWith(
+                        returnFlights.switchIfEmpty(
+                                Flux.error(new RuntimeException("No return flights found"))
+                        )
+                );
     }
 
 }
