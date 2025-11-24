@@ -71,6 +71,32 @@ public class BookingService {
     public Flux<Booking> getHistory(String email) {
         return bookingRepo.findByEmail(email);
     }
+    
+    public Mono<String> cancelTicket(String pnr) {
+
+        return bookingRepo.findById(pnr)
+                .switchIfEmpty(Mono.error(new RuntimeException("PNR not found")))
+                .flatMap(booking -> {
+
+                    LocalDateTime now = LocalDateTime.now();
+                    LocalDateTime journey = booking.getJourneyDate();
+
+                    if (now.plusHours(24).isAfter(journey)) {
+                        return Mono.error(new RuntimeException(
+                                "Ticket cannot be cancelled less than 24 hours before journey"));
+                    }
+
+                    booking.setBookingStatus(BookingStatus.CANCELLED);
+
+                    return flightRepo.findById(booking.getFlightId())
+                            .flatMap(flight -> {
+                                flight.setAvailableSeats(flight.getAvailableSeats() + booking.getSeatsBooked());
+                                return flightRepo.save(flight);
+                            })
+                            .then(bookingRepo.save(booking))
+                            .thenReturn("Ticket cancelled successfully");
+                });
+    }
 
 
 }
