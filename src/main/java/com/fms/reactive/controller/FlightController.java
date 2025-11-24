@@ -1,5 +1,7 @@
 package com.fms.reactive.controller;
 
+import java.util.Map;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,11 +33,14 @@ public class FlightController {
     private final FlightService flightService;
     private final BookingService bookingService;
     
+    
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<Flight> addInventory(@Valid @RequestBody AddInventory req) {
-        return flightService.addInventory(req);
+    public Mono<Map<String, String>> addInventory(@Valid @RequestBody AddInventory req) {
+        return flightService.addInventory(req)
+                .map(flight -> Map.of("id", flight.getId()));
     }
+
     
     @PostMapping("/search")
     @ResponseStatus(HttpStatus.OK)

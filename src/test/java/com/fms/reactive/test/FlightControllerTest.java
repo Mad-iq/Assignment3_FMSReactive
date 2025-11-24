@@ -6,12 +6,11 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-import com.fms.reactive.controller.FlightController;
 import com.fms.reactive.model.Flight;
 import com.fms.reactive.model.TripStatus;
 import com.fms.reactive.request.AddInventory;
@@ -23,15 +22,15 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FlightControllerTest {
+class FlightControllerTest {
 
     @Autowired
     private WebTestClient client;
 
-    @MockBean
+    @Mock
     private FlightService flightService;
 
-    @MockBean
+    @Mock
     private BookingService bookingService;
 
     @Test

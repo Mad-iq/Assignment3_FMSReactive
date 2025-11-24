@@ -3,18 +3,18 @@ package com.fms.reactive.test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.fms.reactive.model.Booking;
 import com.fms.reactive.model.MealStatus;
-import com.fms.reactive.model.Passenger;
 import com.fms.reactive.request.BookingRequest;
 import com.fms.reactive.request.PassengerRequest;
 import com.fms.reactive.service.BookingService;
@@ -23,27 +23,29 @@ import com.fms.reactive.service.FlightService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest
 public class BookingControllerTest {
 
     @Autowired
-    private WebTestClient client;
+    private ApplicationContext context;
 
-    @MockBean
+    @MockitoBean
     private BookingService bookingService;
 
-    @MockBean
+    @MockitoBean
     private FlightService flightService;
 
+    private WebTestClient client;
+
+    @BeforeEach
+    void setup() {
+        client = WebTestClient.bindToApplicationContext(context).build();
+    }
 
     @Test
     void testBookTicket() {
 
-        PassengerRequest p = new PassengerRequest(
-                "Ravi",
-                "M",
-                25
-        );
+        PassengerRequest p = new PassengerRequest("Ravi", "M", 25);
 
         BookingRequest req = new BookingRequest(
                 "John Doe",
@@ -102,5 +104,18 @@ public class BookingControllerTest {
                 .expectBody()
                 .jsonPath("$[0].email").isEqualTo("test@mail.com");
     }
-}
 
+    @Test
+    void testCancelTicket() {
+
+        when(bookingService.cancelTicket("PNR123"))
+                .thenReturn(Mono.just("Cancelled"));
+
+        client.delete()
+                .uri("/api/flight/booking/cancel/PNR123")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(String.class)
+                .isEqualTo("Cancelled");
+    }
+}

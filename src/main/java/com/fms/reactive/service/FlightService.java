@@ -26,8 +26,8 @@ public class FlightService {
 
     public Mono<Flight> addInventory(AddInventory req) {
     	
-    	 City sourceCity = validateCity(req.getSource());
-    	 City destinationCity = validateCity(req.getDestination());
+    	 validateCity(req.getSource());
+    	 validateCity(req.getDestination());
 
         return airlineRepository.existsById(req.getAirlineId())
                 .flatMap(exists -> {

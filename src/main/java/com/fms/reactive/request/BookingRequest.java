@@ -3,7 +3,6 @@ package com.fms.reactive.request;
 import java.util.List;
 
 import com.fms.reactive.model.MealStatus;
-import com.fms.reactive.model.TripStatus;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
