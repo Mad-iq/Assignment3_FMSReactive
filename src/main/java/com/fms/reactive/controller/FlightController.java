@@ -1,6 +1,7 @@
 package com.fms.reactive.controller;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +49,19 @@ public class FlightController {
             @Valid @RequestBody BookingRequest request) {
 
         return bookingService.bookTicket(flightId, request);
+    }
+    
+    @GetMapping("/booking/ticket/{pnr}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<Booking> getTicket(@PathVariable String pnr) {
+        return bookingService.getTicket(pnr);
+    }
+
+    
+    @GetMapping("/booking/history/{email}")
+    @ResponseStatus(HttpStatus.OK)
+    public Flux<Booking> getHistory(@PathVariable String email) {
+        return bookingService.getHistory(email);
     }
 
 

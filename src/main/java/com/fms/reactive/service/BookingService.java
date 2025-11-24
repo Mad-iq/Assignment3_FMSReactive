@@ -62,5 +62,15 @@ public class BookingService {
                             .then(bookingRepo.save(booking));
                 });
     }
+    
+    public Mono<Booking> getTicket(String pnr) {
+        return bookingRepo.findById(pnr)
+                .switchIfEmpty(Mono.error(new RuntimeException("PNR not found")));
+    }
+
+    public Flux<Booking> getHistory(String email) {
+        return bookingRepo.findByEmail(email);
+    }
+
 
 }
