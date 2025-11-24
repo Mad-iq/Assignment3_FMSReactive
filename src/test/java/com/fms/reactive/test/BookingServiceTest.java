@@ -43,7 +43,7 @@ class BookingServiceTest {
         flight.setAvailableSeats(10);
         flight.setPrice(2000);
 
-        Booking savedBooking = new Booking();  // no setId() needed
+        Booking savedBooking = new Booking();  
 
         BookingRequest req = new BookingRequest();
         req.setName("User");

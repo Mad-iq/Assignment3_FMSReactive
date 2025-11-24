@@ -74,7 +74,7 @@ class FlightServiceTest {
 
         AddInventory req = new AddInventory();
         req.setAirlineId("A001");
-        req.setSource("XYZ");   // invalid
+        req.setSource("XYZ");  
         req.setDestination("MUMBAI");
         req.setStartTime("2025-12-10T10:00:00");
         req.setPrice(5000);
