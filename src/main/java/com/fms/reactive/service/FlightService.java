@@ -56,8 +56,7 @@ public class FlightService {
         try {
             return City.valueOf(value.toUpperCase());
         } catch (IllegalArgumentException ex) {
-            throw new RuntimeException(
-                "Invalid city");
+            throw new RuntimeException("Invalid city");
         }
     }
     
@@ -86,14 +85,13 @@ public class FlightService {
             );
         }
 
-        // ✔ ROUND TRIP requires returnDate
         if (req.getReturnDate() == null || req.getReturnDate().isBlank()) {
             return Flux.error(new IllegalArgumentException(
                     "Return date is required for ROUND_TRIP search"
             ));
         }
 
-        City tempSource = destinationCity;  // reverse route
+        City tempSource = destinationCity;  
         City tempDestination = sourceCity;
 
         LocalDate returnDate = LocalDate.parse(req.getReturnDate());
