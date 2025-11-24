@@ -4,7 +4,9 @@ import com.fms.reactive.model.TripStatus;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
+@Data
 public class SearchFlightRequest {
 
     @NotBlank(message = "Source is required")

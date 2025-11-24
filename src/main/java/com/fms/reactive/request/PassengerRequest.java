@@ -3,7 +3,9 @@ package com.fms.reactive.request;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
+@Data
 public class PassengerRequest {
 
 	    @NotBlank(message = "Passenger name is required")
